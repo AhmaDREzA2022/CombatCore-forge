@@ -4,47 +4,79 @@
 
 Lightweight **client-side only** PvP helper for Minecraft 1.8.9.
 
-Four modules — **W-Tap**, **S-Tap**, **Jump Reset** and **Block Hit** — plus a small module system, a ClickGUI and a JSON config.
+Four modules — **W-Tap**, **S-Tap**, **Jump Reset** and **Block Hit** — plus a module system, ClickGUI and JSON config.
 
-No reach, aim, velocity, ESP or any other cheat: the mod only ever simulates input the player could produce themselves, through vanilla key bindings.
+No reach, aim, velocity, ESP or any other cheat: the mod only simulates input the player could produce themselves through vanilla key bindings.
 
-## Modules
+## Requirements
 
-All modules are in the *Combat* category and are toggleable via the ClickGUI or an optional per-module key binding.
+- **JDK 8** (important – newer JDKs often break old ForgeGradle)
+- Git
+- Internet (to download Gradle + Minecraft/Forge dependencies the first time)
 
-### W-Tap
-Releases the forward key for one tick shortly after landing a hit, then presses it again (classic sprint reset).
-
-### S-Tap
-Briefly presses S (backwards) after a hit while releasing W.
-
-### Jump Reset
-Jumps on the tick the player takes knockback to reduce horizontal KB.
-
-### Block Hit
-Right-clicks (blocks with the sword) a short moment after a hit.
-
-## Controls
-
-| Key | Action |
-|-----|--------|
-| Right Shift | Open / close the ClickGUI |
-| Per-module (default unbound) | Toggle that module |
-
-## Building
+## Build from Terminal (no IntelliJ needed)
 
 ```bash
+git clone https://github.com/AhmaDREzA2022/CombatCore-forge.git
+cd CombatCore-forge
+
+# Make the wrapper executable (Linux / macOS)
+chmod +x gradlew
+
+# First time only – downloads Gradle 4.9 + all dependencies (can take several minutes)
 ./gradlew setupDecompWorkspace
+
+# Build the mod
 ./gradlew build
 ```
 
-Requires **JDK 8**. The jar appears in `build/libs/`.
+On **Windows** use:
 
-## Port notes
+```bat
+gradlew.bat setupDecompWorkspace
+gradlew.bat build
+```
 
-- Original: Ornithe + Feather/Calamus mappings + Fabric entrypoints
-- This port: ForgeGradle 2.1 + Sponge Mixin 0.7 + MCP `stable_22`
-- KeyBinding simulation uses `KeyBinding.setKeyBindState`
-- Mixins target `Minecraft.runTick`, `PlayerControllerMP.attackEntity`, `GameSettings.loadOptions`
+The finished jar will be in:
 
-Original license: CC0-1.0
+```
+build/libs/CombatCore-1.0.0.jar
+```
+
+Copy that jar into your Minecraft `mods` folder (Forge 1.8.9).
+
+### If `gradle-wrapper.jar` is missing
+
+The binary jar cannot always be committed cleanly. If you get an error about the wrapper jar, run this once (requires a system Gradle or download it manually):
+
+```bash
+# Option A – if you already have any Gradle installed
+gradle wrapper --gradle-version 4.9
+
+# Option B – download the jar yourself
+mkdir -p gradle/wrapper
+# Then place gradle-wrapper.jar into gradle/wrapper/
+# You can get it from any other Forge 1.8.9 project or from Gradle distributions.
+```
+
+After that `./gradlew` will work normally.
+
+## Modules
+
+| Module      | Description                                      |
+|-------------|--------------------------------------------------|
+| W-Tap       | Releases + re-presses W after a hit (sprint reset) |
+| S-Tap       | Briefly presses S after a hit                    |
+| Jump Reset  | Jumps on knockback to reduce KB                  |
+| Block Hit   | Right-clicks with sword shortly after a hit      |
+
+## Controls
+
+- **Right Shift** – open / close ClickGUI
+- Per-module keys (default unbound) – toggle individual modules
+
+Config is saved to `.minecraft/config/combatcore.json`.
+
+## License
+
+Original project is CC0-1.0. This port keeps the same spirit.
