@@ -1,0 +1,13 @@
+.gradle/
+build/
+run/
+out/
+*.iml
+.idea/
+.classpath
+.project
+.settings/
+eclipse/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
