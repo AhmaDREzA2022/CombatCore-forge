@@ -1,0 +1,16 @@
+[
+{
+  "modid": "combatcore",
+  "name": "Combat Core",
+  "description": "Lightweight client-side PvP helper for 1.8.9: W-Tap, S-Tap, Jump Reset and Block Hit with a ClickGUI. No reach, aim or other cheat modules.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["AhmaDREzA2022"],
+  "credits": "Ported from CombatCore-Ornithe",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

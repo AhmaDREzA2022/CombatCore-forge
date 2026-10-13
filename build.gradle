@@ -1,0 +1,88 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'java'
+
+version = '1.0.0'
+group = 'com.combatcore'
+archivesBaseName = 'CombatCore'
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    version = '1.8.9-11.15.1.2318-1.8.9'
+    runDir = 'run'
+    mappings = 'stable_22'
+    makeObfSourceJar = false
+}
+
+repositories {
+    maven { url = 'https://repo.spongepowered.org/maven' }
+    mavenCentral()
+}
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+dependencies {
+    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        exclude module: 'guava'
+        exclude module: 'commons-io'
+        exclude module: 'gson'
+        exclude module: 'launchwrapper'
+    }
+}
+
+mixin {
+    add sourceSets.main, 'mixins.combatcore.refmap.json'
+}
+
+jar {
+    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest {
+        attributes(
+            'FMLCorePlugin': 'com.combatcore.mixin.MixinLoader',
+            'FMLCorePluginContainsFMLMod': 'true',
+            'ForceLoadAsMod': 'true',
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'MixinConfigs': 'mixins.combatcore.json',
+            'TweakOrder': '0',
+            'ModSide': 'CLIENT'
+        )
+    }
+}
+
+reobf {
+    jar {
+        mappingType = 'SEARGE'
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

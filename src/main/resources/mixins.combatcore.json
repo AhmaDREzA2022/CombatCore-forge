@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.7",
+  "package": "com.combatcore.mixin",
+  "refmap": "mixins.combatcore.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [
+    "MinecraftMixin",
+    "PlayerControllerMPMixin",
+    "GameSettingsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
